@@ -311,62 +311,62 @@ func (c *clientConn) onOpen() error {
 	c.pingTimeout = msg.PingTimeout
 	c.id = msg.Sid
 
-// 	c.getCurrent().Close()
+	c.getCurrent().Close()
 
-// 	q.Set("sid", c.id)
-// 	c.request.URL.RawQuery = q.Encode()
+	q.Set("sid", c.id)
+	c.request.URL.RawQuery = q.Encode()
 
-// 	transport, err = creater.Client(c.request)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	c.setCurrent("polling", transport)
+	transport, err = creater.Client(c.request)
+	if err != nil {
+		return err
+	}
+	c.setCurrent("polling", transport)
 
-// 	pack, err = c.getCurrent().NextReader()
-// 	if err != nil {
-// 		return err
-// 	}
+	pack, err = c.getCurrent().NextReader()
+	if err != nil {
+		return err
+	}
 
-// 	p2 := make([]byte, 4096)
-// 	l, err = pack.Read(p2)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	//fmt.Println(string(p2))
+	p2 := make([]byte, 4096)
+	l, err = pack.Read(p2)
+	if err != nil {
+		return err
+	}
+	//fmt.Println(string(p2))
 
-// 	if c.options.Transport == "polling" {
-// 		//over
-// 	} else if c.options.Transport == "websocket" {
-// 		//upgrade
-// 		creater, exists = creaters["websocket"]
-// 		if !exists {
-// 			return InvalidError
-// 		}
+	if c.options.Transport == "polling" {
+		//over
+	} else if c.options.Transport == "websocket" {
+		//upgrade
+		creater, exists = creaters["websocket"]
+		if !exists {
+			return InvalidError
+		}
 
-// 		if c.request.URL.Scheme == "https" {
-// 			c.request.URL.Scheme = "wss"
-// 		} else {
-// 			c.request.URL.Scheme = "ws"
-// 		}
-// 		q.Set("sid", c.id)
-// 		q.Set("transport", "websocket")
-// 		c.request.URL.RawQuery = q.Encode()
+		if c.request.URL.Scheme == "https" {
+			c.request.URL.Scheme = "wss"
+		} else {
+			c.request.URL.Scheme = "ws"
+		}
+		q.Set("sid", c.id)
+		q.Set("transport", "websocket")
+		c.request.URL.RawQuery = q.Encode()
 
-// 		transport, err = creater.Client(c.request)
-// 		if err != nil {
-// 			return err
-// 		}
-// 		c.setUpgrading("websocket", transport)
+		transport, err = creater.Client(c.request)
+		if err != nil {
+			return err
+		}
+		c.setUpgrading("websocket", transport)
 
-// 		w, err := c.getUpgrade().NextWriter(message.MessageText, parser.PING)
-// 		if err != nil {
-// 			return err
-// 		}
-// 		w.Write([]byte("probe"))
-// 		w.Close()
-// 	} else {
-// 		return InvalidError
-// 	}
+		w, err := c.getUpgrade().NextWriter(message.MessageText, parser.PING)
+		if err != nil {
+			return err
+		}
+		w.Write([]byte("probe"))
+		w.Close()
+	} else {
+		return InvalidError
+	}
 
 	//fmt.Println("end")
 
